@@ -85,17 +85,17 @@ public class Controller {
                 double fuel = Double.parseDouble(this.fuel.getText());
                 if(isCapacity) {
                     double capacity = Double.parseDouble(this.capacity.getText());
-                    doTheWork(logistics, logistics.createTransportWithFuelAndCapacity(fuel, capacity));
+                    doTheWork(logistics.createTransportWithFuelAndCapacity(fuel, capacity));
                     return;
                 }
-                doTheWork(logistics, logistics.createTransportWithFuel(fuel));
+                doTheWork(logistics.createTransportWithFuel(fuel));
                 return;
             } else if(isCapacity) {
                 double capacity = Double.parseDouble(this.capacity.getText());
-                doTheWork(logistics, logistics.createTransportWithCapacity(capacity));
+                doTheWork(logistics.createTransportWithCapacity(capacity));
                 return;
             }
-            doTheWork(logistics, logistics.createTransport());
+            doTheWork(logistics.createTransport());
         } else {
             Timeline timelineX = new Timeline(new KeyFrame(Duration.seconds(0.1), t -> {
                 if (x == 0) {
@@ -116,7 +116,7 @@ public class Controller {
         }
     }
 
-    private void doTheWork(Logistics logistics, ITransport transport) {
+    private void doTheWork(ITransport transport) {
         transport.load();
         transport.goTo(this.address.getText());
         transport.unload();
