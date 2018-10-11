@@ -11,6 +11,7 @@ import src.factory.method.AirLogistics;
 import src.factory.method.Logistics;
 import src.factory.method.RoadLogistics;
 import src.factory.method.SeaLogistics;
+import src.transport.ITransport;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -84,21 +85,17 @@ public class Controller {
                 double fuel = Double.parseDouble(this.fuel.getText());
                 if(isCapacity) {
                     double capacity = Double.parseDouble(this.capacity.getText());
-                    logistics.planRout(logistics.createTransportWithFuelAndCapacity(fuel,capacity));
-                    logistics.deliverTo(this.address.getText());
+                    doTheWork(logistics, logistics.createTransportWithFuelAndCapacity(fuel, capacity));
                     return;
                 }
-                logistics.planRout(logistics.createTransportWithFuel(fuel));
-                logistics.deliverTo(this.address.getText());
+                doTheWork(logistics, logistics.createTransportWithFuel(fuel));
                 return;
             } else if(isCapacity) {
                 double capacity = Double.parseDouble(this.capacity.getText());
-                logistics.planRout(logistics.createTransportWithCapacity(capacity));
-                logistics.deliverTo(this.address.getText());
+                doTheWork(logistics, logistics.createTransportWithCapacity(capacity));
                 return;
             }
-            logistics.planRout(logistics.createTransport());
-            logistics.deliverTo(this.address.getText());
+            doTheWork(logistics, logistics.createTransport());
         } else {
             Timeline timelineX = new Timeline(new KeyFrame(Duration.seconds(0.1), t -> {
                 if (x == 0) {
@@ -117,6 +114,15 @@ public class Controller {
             timelineX.play();
 
         }
+    }
+
+    private void doTheWork(Logistics logistics, ITransport transport) {
+        transport.load();
+        transport.goTo(this.address.getText());
+        transport.unload();
+        transport.goTo("warehouse");
+        transport.refuel();
+        System.out.println();
     }
 }
 
