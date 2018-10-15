@@ -6,6 +6,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 import src.factory.method.AirLogistics;
 import src.factory.method.Logistics;
@@ -36,10 +38,11 @@ public class Controller {
     @FXML
     private TextField address;
 
-
     @FXML
     private TextArea output;
 
+    @FXML
+    private ImageView image;
 
     @FXML
     private void initialize() {
@@ -67,16 +70,21 @@ public class Controller {
             switch (this.type.getValue()) {
                 case "Road":
                     logistics = new RoadLogistics();
+                    this.image.setImage(new Image("file:./truck.jpg"));
                     break;
                 case "Sea":
                     logistics = new SeaLogistics();
+                    this.image.setImage(new Image("file:./ship.jpg"));
                     break;
                 case "Air":
                     logistics = new AirLogistics();
+                    this.image.setImage(new Image("file:./plane.jpg"));
                     break;
                 default:
                     return;
             }
+            this.image.setPreserveRatio(true);
+            this.image.setFitHeight(100);
 
             boolean isFuel = !this.fuel.getText().isEmpty();
             boolean isCapacity = !this.capacity.getText().isEmpty();
@@ -85,6 +93,7 @@ public class Controller {
                 double fuel = Double.parseDouble(this.fuel.getText());
                 if(isCapacity) {
                     double capacity = Double.parseDouble(this.capacity.getText());
+                    this.image.setFitHeight(capacity + fuel);
                     doTheWork(logistics.createTransportWithFuelAndCapacity(fuel, capacity));
                     return;
                 }
@@ -92,6 +101,7 @@ public class Controller {
                 return;
             } else if(isCapacity) {
                 double capacity = Double.parseDouble(this.capacity.getText());
+                this.image.setFitHeight(capacity);
                 doTheWork(logistics.createTransportWithCapacity(capacity));
                 return;
             }
